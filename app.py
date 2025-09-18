@@ -1,13 +1,9 @@
 import cv2
 from ultralytics import YOLO
 
-# Load a pretrained YOLO model
-# For testing: use yolov8n.pt (COCO dataset, no weapons)
-# For real weapon detection: replace with a weapon-trained model like "weapons-yolov8n.pt"
-model = YOLO("yolov8n.pt")
-
-# Weapon-related classes (adjust to match your trained model)
-weapon_classes = ["knife", "gun", "pistol", "rifle"]
+# Load the knife detection model
+MODEL_PATH = r"C:\weapon-detection\Knife-Detector\Results\runs\detect\ADAM_LR_0_0005\weights\best.pt"
+model = YOLO(MODEL_PATH)
 
 # Open webcam
 cap = cv2.VideoCapture(0)
@@ -18,26 +14,13 @@ while True:
         break
 
     # Run YOLO inference
-    results = model(frame, stream=True)
+    results = model(frame)
 
-    # Draw results
-    for r in results:
-        boxes = r.boxes
-        for box in boxes:
-            cls_id = int(box.cls[0])
-            conf = float(box.conf[0])
-            label = model.names[cls_id]
+    # Draw results directly with Ultralytics built-in plot
+    annotated_frame = results[0].plot()
 
-            # Show only weapons with confidence > 0.5
-            if conf > 0.5 and label.lower() in weapon_classes:
-                xyxy = box.xyxy[0].cpu().numpy().astype(int)
-                x1, y1, x2, y2 = xyxy
-                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 255), 2)  # red box
-                cv2.putText(frame, f"{label} {conf:.2f}", (x1, y1 - 10),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
-
-    # Show video
-    cv2.imshow("Weapon Detection", frame)
+    # Show video with detections
+    cv2.imshow("Knife Detection", annotated_frame)
 
     # Press 'q' to quit
     if cv2.waitKey(1) & 0xFF == ord('q'):
