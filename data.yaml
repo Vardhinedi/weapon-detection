@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 2
+names: ['knife', 'pistol']
+
+roboflow:
+  workspace: poke-mstry
+  project: gun-knife-ymlps
+  version: 2
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/poke-mstry/gun-knife-ymlps/dataset/2

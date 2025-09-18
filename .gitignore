@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+.venv/
+
+# Dataset and model weights
+datasets/
+models/
+
+# OS files
+.DS_Store
+Thumbs.db
